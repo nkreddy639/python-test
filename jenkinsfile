@@ -1,0 +1,22 @@
+pipeline{
+  agent any
+    stages{
+      stage('checkout'){
+        steps{
+	  checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'mygit', url: 'https://github.com/nkreddy639/python-test.git']]])
+	}
+      }	
+	stage('build'){
+	  steps{
+	    git credentialsId: 'mygit', url: 'https://github.com/nkreddy639/python-test.git'
+	    sh 'python3 app.py'
+	  }
+        }
+	stage('test'){
+	  steps{
+	    sh 'python3 -m pytest'
+	  }
+	}
+    }
+}
+		      
